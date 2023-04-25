@@ -1,3 +1,7 @@
+function playAudio() {
+  const audio = document.getElementById("audio1");
+  audio.play();
+}
 // Initialize the map
 function initGeo(map) {
   // Create a new marker object for the user's location

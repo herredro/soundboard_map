@@ -16,13 +16,11 @@
   <body>
     <div id="map"></div>
     <div id="audio-buttons">
-      <button id="stopButton">Stop MP3s</button>
+      <button class="MyButton" onclick="playAudio()">Play</button>
+      <button id="stopButton">STOP</button>
     </div>
-    <audio id="audio1">
-      <source src="Dom.m4a" type="audio/mpeg">
-    </audio>
-    <audio id="audio2">
-      <source src="Reg.m4a" type="audio/mpeg">
-    </audio>
+    <audio id="audio1" src="Dom.m4a"></audio>
+    <audio id="audio2" src="Reg.m4a"></audio>
+
   </body>
 </html>
