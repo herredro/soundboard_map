@@ -99,7 +99,7 @@ function initMap() {
         resetPlaying();
   });
   initGeo(map);
-  setInterval(initGeo, 1000);
+  setInterval(initGeo, 5000);
 }
 
 function handleGeolocationError(error) {
