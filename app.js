@@ -55,7 +55,6 @@ function initGeo(map) {
   setInterval(function() {
     navigator.geolocation.getCurrentPosition(function success(pos) {
       const crd = pos.coords;
-      console.log(crd)
       changeMarker({lat: crd.latitude, lng: crd.longitude});
     }, function error(err) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
@@ -66,15 +65,15 @@ function initGeo(map) {
   }, 1000);
 }
 
-function changeMarker(crds) {
+function changeMarker(new_crds) {
   // console.log('changeeee')
   // const items = [{lat:52.508411, long:13.499932}, {lat:52.507758, long:13.497566}];
   // let crds2 = items[Math.floor(Math.random() * items.length)];
   console.log('chMak')
-  console.log(crds)
-  let coor = new google.maps.LatLng(crds.lat, crds.lng)
-  markerLoc.setPosition(coor);
-  circle.setCenter(coor);
+  console.log(new_crds)
+  let crds = new google.maps.LatLng(new_crds.lat, new_crds.lng)
+  markerLoc.setPosition(crds);
+  circle.setCenter(crds);
 
 }
 
