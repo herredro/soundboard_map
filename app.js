@@ -8,7 +8,7 @@ function initGeo(map) {
   const options = {
     // enableHighAccuracy: true,
     timeout: 10000,
-    maximumAge: 100000000000,
+    maximumAge: 0,
   };
   function setMarker(crds) {
     markerLoc = new google.maps.Marker({
@@ -51,17 +51,30 @@ function initGeo(map) {
   }
   navigator.geolocation.getCurrentPosition(function () {}, function () {}, {});
   navigator.geolocation.getCurrentPosition(success, error, options);
-  setInterval(changeMarker, 1000);
-
+  // setInterval(changeMarker, 1000);
+  setInterval(function() {
+    navigator.geolocation.getCurrentPosition(function success(pos) {
+      const crd = pos.coords;
+      console.log(crd)
+      changeMarker({lat: crd.latitude, lng: crd.longitude});
+    }, function error(err) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    }, {
+      timeout: 10000,
+      maximumAge: 0,
+    });
+  }, 1000);
 }
 
-function changeMarker() {
-  console.log('changeeee')
-  const items = [{lat:52.508411, long:13.499932}, {lat:52.507758, long:13.497566}];
-  let crds2 = items[Math.floor(Math.random() * items.length)];
-  // console.log(crds2)
-  markerLoc.setPosition({lat: crds2.lat, lng: crds2.long});
-  circle.setCenter({lat: crds2.lat, lng: crds2.long});
+function changeMarker(crds) {
+  // console.log('changeeee')
+  // const items = [{lat:52.508411, long:13.499932}, {lat:52.507758, long:13.497566}];
+  // let crds2 = items[Math.floor(Math.random() * items.length)];
+  console.log('chMak')
+  console.log(crds)
+  let coor = new google.maps.LatLng(crds.lat, crds.lng)
+  markerLoc.setPosition(coor);
+  circle.setCenter(coor);
 
 }
 
@@ -72,7 +85,7 @@ function initMap() {
   var audio2 = document.getElementById('audio2');
   var center = {lat: 52.5209537, lng: 13.3865511};
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12.9,
+    zoom: 12,
     center: center
   });
   
