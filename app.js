@@ -11,8 +11,7 @@ function initGeo(map) {
     maximumAge: 100000000000,
   };
   function setMarker(crds) {
-    console.log(crds)
-    var marker2 = new google.maps.Marker({
+    markerLoc = new google.maps.Marker({
       position: {lat: crds.lat, lng: crds.long},
       map: map,
       title: "Your Location",
@@ -20,7 +19,6 @@ function initGeo(map) {
         url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
       },
     });
-    console.log(crds)
     const circle = new google.maps.Circle({
       map: map,
       radius: crds.acc, // show accuracy circle around the user's location
@@ -31,14 +29,7 @@ function initGeo(map) {
       strokeOpacity: 0.3,
       strokeWeight: 2,
     });
-    // const marker = new google.maps.Marker({
-    //   position: [52.50744257788, 13.49879719025],
-    //   map: map,
-    //   title: "Your Location",
-    //   icon: {
-    //     url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-    //   },
-    // });
+    
   }
   function success(pos) {
     const crd = pos.coords;
@@ -47,7 +38,6 @@ function initGeo(map) {
     console.log(`Latitude : ${crd.latitude}`);
     console.log(`Longitude: ${crd.longitude}`);
     console.log(`More or less ${crd.accuracy} meters.`);
-    console.log(map);
     
     setMarker({
       lat:crd.latitude,
@@ -61,7 +51,16 @@ function initGeo(map) {
   }
   navigator.geolocation.getCurrentPosition(function () {}, function () {}, {});
   navigator.geolocation.getCurrentPosition(success, error, options);
+  setInterval(changeMarker, 1000);
 
+}
+
+function changeMarker() {
+  console.log('changeeee')
+  const items = [{lat:52.508411, long:13.499932}, {lat:52.507758, long:13.497566}];
+  let crds2 = items[Math.floor(Math.random() * items.length)];
+  // console.log(crds2)
+  markerLoc.setPosition({lat: crds2.lat, lng: crds2.long});
 }
 
 function initMap() {
@@ -84,6 +83,7 @@ function initMap() {
     position: {lat: 52.52135421233425, lng: 13.396890832463953},
     map: map
   });
+  let markerLoc;
   
   // Add click event listeners to the markers
   marker1.addListener('click', function() {
@@ -103,7 +103,6 @@ function initMap() {
         resetPlaying();
   });
   initGeo(map);
-  setInterval(initGeo, 5000);
 }
 
 function handleGeolocationError(error) {
