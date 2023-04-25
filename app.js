@@ -19,7 +19,7 @@ function initGeo(map) {
         url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
       },
     });
-    const circle = new google.maps.Circle({
+    circle = new google.maps.Circle({
       map: map,
       radius: crds.acc, // show accuracy circle around the user's location
       center: new google.maps.LatLng(crds.lat, crds.long),
@@ -61,6 +61,8 @@ function changeMarker() {
   let crds2 = items[Math.floor(Math.random() * items.length)];
   // console.log(crds2)
   markerLoc.setPosition({lat: crds2.lat, lng: crds2.long});
+  circle.setCenter({lat: crds2.lat, lng: crds2.long});
+
 }
 
 function initMap() {
@@ -84,6 +86,7 @@ function initMap() {
     map: map
   });
   let markerLoc;
+  let circle;
   
   // Add click event listeners to the markers
   marker1.addListener('click', function() {
