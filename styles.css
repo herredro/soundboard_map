@@ -12,6 +12,19 @@
   height: 50px;
   background-color: #fff;
 }
+#location-info{
+  position: absolute;
+  z-index: 1; /* Ensure the div is on top of the map */
+  top: 50%; /* Set the vertical position to the middle of the screen */
+  left: 50%; /* Set the horizontal position to the middle of the screen */
+  transform: translate(-50%, -50%); /* Move the div back by half of its width and height to center it */
+  background-color: rgba(255, 255, 255, 0.8); /* Set the background color with some transparency */
+  padding: 8px; /* Add some padding around the content */
+  border-radius: 4px; /* Give the div rounded corners */
+  font-size: 14px; /* Set the font size of the content */
+  text-align: center; /* Center the text within the div */
+}
+
 
 #audio-buttons button {
   margin: 5px;

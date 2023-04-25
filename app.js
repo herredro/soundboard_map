@@ -77,6 +77,12 @@ function error(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
 
+function updateLocationInfo(lat, lng) {
+  const locationInfo = document.getElementById("location-info");
+  locationInfo.innerHTML = `Latitude: ${lat}, Longitude: ${lng}`;
+}
+
+
 function actualChange(){
   const options = {
     // enableHighAccuracy: true,
@@ -121,6 +127,7 @@ function changeMarker(new_crds) {
   let crds = new google.maps.LatLng(new_crds.lat, new_crds.lng)
   markerLoc.setPosition(crds);
   circle.setCenter(crds);
+  updateLocationInfo(new_crds.lat, new_crds.lng);
 
 }
 
