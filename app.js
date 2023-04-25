@@ -1,3 +1,5 @@
+const MAX_AGE = 100
+
 function playAudio() {
   const audio = document.getElementById("audio1");
   audio.play();
@@ -8,7 +10,7 @@ function initGeo(map) {
   const options = {
     // enableHighAccuracy: true,
     timeout: 10000,
-    maximumAge: 0,
+    maximumAge: MAX_AGE,
   };
   function setMarker(crds) {
     markerLoc = new google.maps.Marker({
@@ -52,25 +54,70 @@ function initGeo(map) {
   navigator.geolocation.getCurrentPosition(function () {}, function () {}, {});
   navigator.geolocation.getCurrentPosition(success, error, options);
   // setInterval(changeMarker, 1000);
+  
+  // setInterval(function() {
+  //   navigator.geolocation.getCurrentPosition(function success(pos) {
+  //     const crd = pos.coords;
+  //     changeMarker({lat: crd.latitude, lng: crd.longitude});
+  //   }, function error(err) {
+  //     console.warn(`ERROR(${err.code}): ${err.message}`);
+  //   }, {
+  //     timeout: 10000,
+  //     maximumAge: 0,
+  //   });
+  // }, 1000);
+
+  // Define a list of coordinates to simulate changing locations
+  // randomChange();
+  actualChange();
+
+}
+
+function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+function actualChange(){
+  const options = {
+    // enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: MAX_AGE,
+  };
   setInterval(function() {
-    navigator.geolocation.getCurrentPosition(function success(pos) {
-      const crd = pos.coords;
-      changeMarker({lat: crd.latitude, lng: crd.longitude});
-    }, function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    }, {
-      timeout: 10000,
-      maximumAge: 0,
-    });
+    navigator.geolocation.getCurrentPosition(function (position) {
+      console.log('here')
+      console.log(position.coords.latitude)
+      changeMarker({lat:position.coords.latitude, lng:position.coords.longitude} );
+    }, error, options);
+  }, 1000);
+}
+
+function randomChange(){
+  const coordinates = [
+    { lat: 52.519983, lng: 13.401516 },
+    { lat: 52.519765, lng: 13.401460 },
+    { lat: 52.519592, lng: 13.401438 },
+    { lat: 52.520183, lng: 13.401604 },
+    { lat: 52.519942, lng: 13.402134 },
+    { lat: 52.519724, lng: 13.402067 },
+    { lat: 52.519549, lng: 13.402039 },
+    { lat: 52.520140, lng: 13.402205 },
+    { lat: 52.519899, lng: 13.402735 },
+    { lat: 52.519681, lng: 13.402668 }
+  ];
+  let index = 0;
+  setInterval(function() {
+    const coordinate = coordinates[index];
+    const position = {
+      lat: coordinate.lat,
+      lng: coordinate.lng
+    };
+    changeMarker(position);
+    index = (index + 1) % coordinates.length;
   }, 1000);
 }
 
 function changeMarker(new_crds) {
-  // console.log('changeeee')
-  // const items = [{lat:52.508411, long:13.499932}, {lat:52.507758, long:13.497566}];
-  // let crds2 = items[Math.floor(Math.random() * items.length)];
-  console.log('chMak')
-  console.log(new_crds)
   let crds = new google.maps.LatLng(new_crds.lat, new_crds.lng)
   markerLoc.setPosition(crds);
   circle.setCenter(crds);
@@ -78,7 +125,6 @@ function changeMarker(new_crds) {
 }
 
 function initMap() {
-  
   const stopButton = document.getElementById("stopButton");
   var audio1 = document.getElementById('audio1');
   var audio2 = document.getElementById('audio2');
@@ -87,8 +133,9 @@ function initMap() {
     zoom: 12,
     center: center
   });
-  
-  // Add markers to the map
+  let markerLoc;
+  let circle;
+
   var marker1 = new google.maps.Marker({
     position: {lat: 52.519162568135144, lng: 13.401166963949985},
     map: map
@@ -97,15 +144,11 @@ function initMap() {
     position: {lat: 52.52135421233425, lng: 13.396890832463953},
     map: map
   });
-  let markerLoc;
-  let circle;
   
-  // Add click event listeners to the markers
   marker1.addListener('click', function() {
     audio1.currentTime = 0;
     audio1.play();
-  });
-  
+  });  
   marker2.addListener('click', function() {
     audio2.currentTime = 0;
     audio2.play();
@@ -118,22 +161,4 @@ function initMap() {
         resetPlaying();
   });
   initGeo(map);
-}
-
-function handleGeolocationError(error) {
-  console.log('hi')
-  switch(error.code) {
-    case error.PERMISSION_DENIED:
-      console.error("User denied the request for Geolocation.");
-      break;
-    case error.POSITION_UNAVAILABLE:
-      console.error("Location information is unavailable.");
-      break;
-    case error.TIMEOUT:
-      console.error("The request to get user location timed out.");
-      break;
-    case error.UNKNOWN_ERROR:
-      console.error("An unknown error occurred.");
-      break;
-  }
 }
