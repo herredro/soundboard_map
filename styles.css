@@ -46,7 +46,10 @@
 /* Adjust marker size for smaller screens */
 @media (max-width: 767px) {
   .google-maps-marker {
-    width: 24px;
-    height: 24px;
+    width: 54px;
+    height: 54px;
+  }
+  #map {
+    height: 300px;
   }
 }
