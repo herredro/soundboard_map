@@ -2,25 +2,62 @@
 function initGeo(map) {
   // Create a new marker object for the user's location
   const options = {
-  enableHighAccuracy: false,
-  timeout: 10000,
-  maximumAge: 0,
-};
+    // enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 100000000000,
+  };
+  function setMarker(crds) {
+    console.log(crds)
+    var marker2 = new google.maps.Marker({
+      position: {lat: crds.lat, lng: crds.long},
+      map: map,
+      title: "Your Location",
+      icon: {
+        url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+      },
+    });
+    console.log(crds)
+    const circle = new google.maps.Circle({
+      map: map,
+      radius: crds.acc, // show accuracy circle around the user's location
+      center: new google.maps.LatLng(crds.lat, crds.long),
+      fillColor: "#007bff",
+      fillOpacity: 0.2,
+      strokeColor: "#007bff",
+      strokeOpacity: 0.3,
+      strokeWeight: 2,
+    });
+    // const marker = new google.maps.Marker({
+    //   position: [52.50744257788, 13.49879719025],
+    //   map: map,
+    //   title: "Your Location",
+    //   icon: {
+    //     url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+    //   },
+    // });
+  }
+  function success(pos) {
+    const crd = pos.coords;
 
-function success(pos) {
-  const crd = pos.coords;
+    console.log("Your current position is:");
+    console.log(`Latitude : ${crd.latitude}`);
+    console.log(`Longitude: ${crd.longitude}`);
+    console.log(`More or less ${crd.accuracy} meters.`);
+    console.log(map);
+    
+    setMarker({
+      lat:crd.latitude,
+      long:crd.longitude,
+      acc:crd.accuracy
+    })
+  }
 
-  console.log("Your current position is:");
-  console.log(`Latitude : ${crd.latitude}`);
-  console.log(`Longitude: ${crd.longitude}`);
-  console.log(`More or less ${crd.accuracy} meters.`);
-}
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+  navigator.geolocation.getCurrentPosition(function () {}, function () {}, {});
+  navigator.geolocation.getCurrentPosition(success, error, options);
 
-function error(err) {
-  console.warn(`ERROR(${err.code}): ${err.message}`);
-}
-
-navigator.geolocation.getCurrentPosition(success, error, options);
 }
 
 function initMap() {
@@ -30,7 +67,7 @@ function initMap() {
   var audio2 = document.getElementById('audio2');
   var center = {lat: 52.5209537, lng: 13.3865511};
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 14.5,
+    zoom: 12.9,
     center: center
   });
   
@@ -62,6 +99,7 @@ function initMap() {
         resetPlaying();
   });
   initGeo(map);
+  setInterval(initGeo, 5000);
 }
 
 function handleGeolocationError(error) {
